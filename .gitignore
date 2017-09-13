@@ -1,0 +1,7 @@
+*.iml
+*.lck
+.idea
+log
+logs/
+target/
+testLog.log
