@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class BorrowServiceTest {
+public class LibraryServiceTest {
 
     private static final int BOOK_ID = 11;
     private static final int READER_ID = 44;
@@ -36,7 +36,7 @@ public class BorrowServiceTest {
     @Mock
     private BookHistoryRepository bookHistoryRepository;
 
-    BorrowService borrowService;
+    LibraryService libraryService;
 
     private Book book;
     private Book borrowedBook;
@@ -56,7 +56,7 @@ public class BorrowServiceTest {
 
 
         initMocks(this);
-        borrowService = new BorrowService(bookRepo, readerRepo, bookHistoryRepository);
+        libraryService = new LibraryService(bookRepo, readerRepo, bookHistoryRepository);
 
 
         when(bookRepo.getBook(BOOK_ID)).thenReturn(book);
@@ -68,7 +68,7 @@ public class BorrowServiceTest {
 
 
         // when
-        borrowService.borrowBook(READER_ID, BOOK_ID);
+        libraryService.borrowBook(READER_ID, BOOK_ID);
 
         // then
 
@@ -96,7 +96,7 @@ public class BorrowServiceTest {
         when(bookRepo.getBook(BOOK_ID)).thenReturn(borrowedBook);
 
         // when
-        catchException(borrowService).borrowBook(READER_ID, BOOK_ID);
+        catchException(libraryService).borrowBook(READER_ID, BOOK_ID);
 
         // then
         Exception e = caughtException();
@@ -112,7 +112,7 @@ public class BorrowServiceTest {
         // not borrowed
 
         // when
-        catchException(borrowService).returnBook(READER_ID, BOOK_ID);
+        catchException(libraryService).returnBook(READER_ID, BOOK_ID);
 
 
         // then
@@ -128,7 +128,7 @@ public class BorrowServiceTest {
         when(bookRepo.getBook(BOOK_ID)).thenReturn(borrowedBook);
 
         // when
-        borrowService.returnBook(READER_ID, BOOK_ID);
+        libraryService.returnBook(READER_ID, BOOK_ID);
 
         // then
         ArgumentCaptor<Book> bookArg = ArgumentCaptor.forClass(Book.class);
@@ -144,7 +144,7 @@ public class BorrowServiceTest {
         when(bookRepo.getBook(BOOK_ID)).thenReturn(borrowedBook);
 
         // when
-        catchException(borrowService).returnBook(READER2_ID, BOOK_ID);
+        catchException(libraryService).returnBook(READER2_ID, BOOK_ID);
 
         // then
         Exception exception = caughtException();
@@ -161,7 +161,7 @@ public class BorrowServiceTest {
         // no history
 
         // when
-        List<BookHistoryEntry> bookHistory = borrowService.getBookHistory(BOOK_ID);
+        List<BookHistoryEntry> bookHistory = libraryService.getBookHistory(BOOK_ID);
 
         // then
         assertThat(bookHistory).hasSize(0);
@@ -171,7 +171,7 @@ public class BorrowServiceTest {
     public void shouldRecordBookHistory() {
 
         // when
-        borrowService.borrowBook(READER_ID, BOOK_ID);
+        libraryService.borrowBook(READER_ID, BOOK_ID);
 
 
         // then

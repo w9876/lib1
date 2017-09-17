@@ -12,14 +12,14 @@ import java.util.List;
 
 import static java.lang.String.format;
 
-public class BorrowService {
+public class LibraryService {
     private static final Period BORROW_PERIOD = Period.of(0, 0, 14);
     private final BookRepository bookRepo;
     private final ReaderRepository readerRepo;
     private final BookHistoryRepository bookHistoryRepo;
 
 
-    public BorrowService(BookRepository bookRepo, ReaderRepository readerRepo, BookHistoryRepository bookHistoryRepo) {
+    public LibraryService(BookRepository bookRepo, ReaderRepository readerRepo, BookHistoryRepository bookHistoryRepo) {
         this.bookRepo = bookRepo;
         this.readerRepo = readerRepo;
         this.bookHistoryRepo = bookHistoryRepo;

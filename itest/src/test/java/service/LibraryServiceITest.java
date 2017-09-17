@@ -11,12 +11,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class BorrowServiceITest {
+public class LibraryServiceITest {
 
     BookRepository bookRepo = new BookRepositoryImpl();
     ReaderRepository readerRepo = new ReaderRepositoryImpl();
     BookHistoryRepository bookHistoryRepo = new BookHistoryRepositoryImpl(bookRepo, readerRepo);
-    BorrowService borrowService = new BorrowService(bookRepo, readerRepo, bookHistoryRepo);
+    LibraryService libraryService = new LibraryService(bookRepo, readerRepo, bookHistoryRepo);
 
     Book book1 = new Book("Title1", "Author1", 22);
     Reader reader1 = new Reader("John", "Smith");
@@ -30,14 +30,14 @@ public class BorrowServiceITest {
         final int readerId = readerRepo.add(reader1).getId();
 
         // when
-        borrowService.borrowBook(readerId, bookId);
+        libraryService.borrowBook(readerId, bookId);
         // then
 
         assertThat(bookRepo.getBook(bookId).getBorrow().getReaderId()).isEqualTo(readerId);
 
 
         // when
-        borrowService.returnBook(readerId, bookId);
+        libraryService.returnBook(readerId, bookId);
 
         // then
         assertThat(bookRepo.getBook(bookId).getBorrow()).isNull();
