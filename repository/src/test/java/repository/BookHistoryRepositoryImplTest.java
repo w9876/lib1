@@ -9,8 +9,6 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.googlecode.catchexception.CatchException.catchException;
-import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

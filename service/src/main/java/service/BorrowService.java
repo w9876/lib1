@@ -16,13 +16,13 @@ public class BorrowService {
     private static final Period BORROW_PERIOD = Period.of(0, 0, 14);
     private final BookRepository bookRepo;
     private final ReaderRepository readerRepo;
-    private final BookHistoryRepository bookHistoryRepository;
+    private final BookHistoryRepository bookHistoryRepo;
 
 
-    public BorrowService(BookRepository bookRepo, ReaderRepository readerRepo, BookHistoryRepository bookHistoryRepository) {
+    public BorrowService(BookRepository bookRepo, ReaderRepository readerRepo, BookHistoryRepository bookHistoryRepo) {
         this.bookRepo = bookRepo;
         this.readerRepo = readerRepo;
-        this.bookHistoryRepository = bookHistoryRepository;
+        this.bookHistoryRepo = bookHistoryRepo;
     }
 
     public void borrowBook(int readerId, int bookId) {
@@ -39,7 +39,7 @@ public class BorrowService {
         book.setBorrow(borrow);
 
         bookRepo.addOrUpdateBook(book);
-        bookHistoryRepository.addBookHistoryEntry(new BookHistoryEntry(bookId, readerId, borrowDate, Operation.BORROW));
+        bookHistoryRepo.addBookHistoryEntry(new BookHistoryEntry(bookId, readerId, borrowDate, Operation.BORROW));
 
     }
 

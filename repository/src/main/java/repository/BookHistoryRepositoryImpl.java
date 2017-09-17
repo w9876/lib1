@@ -2,10 +2,11 @@ package repository;
 
 import model.BookHistoryEntry;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import static java.util.stream.Collectors.toList;
 
 public class BookHistoryRepositoryImpl implements BookHistoryRepository {
 
@@ -22,7 +23,16 @@ public class BookHistoryRepositoryImpl implements BookHistoryRepository {
 
     @Override
     public List<BookHistoryEntry> getBookHistory(int bookId) {
-        return new ArrayList<>(history);
+        return history.stream()
+                .filter(bhe -> bhe.getBookId() == bookId)
+                .collect(toList());
+    }
+
+    @Override
+    public List<BookHistoryEntry> getReaderHistory(int readerId) {
+        return history.stream()
+                .filter(bhe -> bhe.getReaderId() == readerId)
+                .collect(toList());
     }
 
 

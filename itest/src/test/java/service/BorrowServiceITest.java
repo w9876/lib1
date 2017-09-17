@@ -1,9 +1,12 @@
 package service;
 
 import model.Book;
+import model.BookHistoryEntry;
 import model.Reader;
 import org.junit.Test;
 import repository.*;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,18 +15,19 @@ public class BorrowServiceITest {
 
     BookRepository bookRepo = new BookRepositoryImpl();
     ReaderRepository readerRepo = new ReaderRepositoryImpl();
-    BookHistoryRepository bookHistoryRepository = new BookHistoryRepositoryImpl(bookRepo, readerRepo);
-    BorrowService borrowService = new BorrowService(bookRepo, readerRepo, bookHistoryRepository);
+    BookHistoryRepository bookHistoryRepo = new BookHistoryRepositoryImpl(bookRepo, readerRepo);
+    BorrowService borrowService = new BorrowService(bookRepo, readerRepo, bookHistoryRepo);
 
     Book book1 = new Book("Title1", "Author1", 22);
-    Reader reader1 = new Reader("FirstName", "LastName");
+    Reader reader1 = new Reader("John", "Smith");
+
 
 
     @Test
     public void shouldBorrowAndReturnBookAndRecordHistory() {
         // given
-        int bookId = bookRepo.addOrUpdateBook(book1).getId();
-        int readerId = readerRepo.add(reader1).getId();
+        final int bookId = bookRepo.addOrUpdateBook(book1).getId();
+        final int readerId = readerRepo.add(reader1).getId();
 
         // when
         borrowService.borrowBook(readerId, bookId);
@@ -36,8 +40,24 @@ public class BorrowServiceITest {
         borrowService.returnBook(readerId, bookId);
 
         // then
-
         assertThat(bookRepo.getBook(bookId).getBorrow()).isNull();
+
+        // when
+        List<BookHistoryEntry> bookHistory = bookHistoryRepo.getBookHistory(bookId);
+
+        // then
+        assertThat(bookHistory).hasSize(1);
+        assertThat(bookHistory.get(0).getReaderId()).isEqualTo(readerId);
+
+        // when
+        List<BookHistoryEntry> readerHistory = bookHistoryRepo.getReaderHistory(readerId);
+
+        // then
+        assertThat(readerHistory).hasSize(1);
+        assertThat(readerHistory.get(0).getBookId()).isEqualTo(bookId);
+
+
     }
+
 
 }

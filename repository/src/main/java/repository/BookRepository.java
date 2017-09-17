@@ -3,8 +3,6 @@ package repository;
 import model.Book;
 import model.BookHistoryEntry;
 
-import java.util.List;
-
 /**
  * Created by SG0891718 on 7/9/2017.
  */
@@ -20,4 +18,5 @@ public interface BookRepository {
 
 
     boolean bookExists(BookHistoryEntry entry);
+
 }

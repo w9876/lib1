@@ -8,4 +8,6 @@ public interface BookHistoryRepository {
     void addBookHistoryEntry(BookHistoryEntry entry);
 
     List<BookHistoryEntry> getBookHistory(int bookId);
+
+    List<BookHistoryEntry> getReaderHistory(int readerId);
 }

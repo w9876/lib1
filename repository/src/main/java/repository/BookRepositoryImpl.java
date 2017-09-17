@@ -2,13 +2,9 @@ package repository;
 
 import model.Book;
 import model.BookHistoryEntry;
-import org.assertj.core.util.Preconditions;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.util.Preconditions.checkNotNull;
@@ -30,13 +26,11 @@ public class BookRepositoryImpl implements BookRepository {
             throw new BookNotFoundException(id);
         }
 
-        Book clone = serializer.fromJson(serializer.toJson(book), Book.class);
-        return clone;
+        return serializer.fromJson(serializer.toJson(book), Book.class);
     }
 
     @Override
-    public Book addOrUpdateBook(Book book)
-    {
+    public Book addOrUpdateBook(Book book) {
         checkNotNull(book, "book parameter must not be null");
         Book clonedBook = serializer.fromJson(serializer.toJson(book), Book.class);
         if (clonedBook.getId() == null) {
@@ -51,7 +45,6 @@ public class BookRepositoryImpl implements BookRepository {
     public boolean bookExists(BookHistoryEntry entry) {
         return bookMap.get(entry.getBookId()) != null;
     }
-
 
 
 }

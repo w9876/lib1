@@ -17,7 +17,6 @@ import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -53,8 +52,7 @@ public class BorrowServiceTest {
 
         borrowedBook = new Book("Title", "Author", 123);
         borrowedBook.setId(BOOK_ID);
-        borrowedBook.setBorrow(new Borrow( reader.getId(), LocalDate.now(), LocalDate.now().plus(10, DAYS)));
-
+        borrowedBook.setBorrow(new Borrow(reader.getId(), LocalDate.now(), LocalDate.now().plus(10, DAYS)));
 
 
         initMocks(this);
@@ -74,11 +72,11 @@ public class BorrowServiceTest {
 
         // then
 
-        verify(bookRepo, times(1)).getBook(BOOK_ID);
-        verify(readerRepo, times(1)).getReader(READER_ID);
+        verify(bookRepo).getBook(BOOK_ID);
+        verify(readerRepo).getReader(READER_ID);
 
         ArgumentCaptor<Book> bookArg = ArgumentCaptor.forClass(Book.class);
-        verify(bookRepo, times(1)).addOrUpdateBook(bookArg.capture());
+        verify(bookRepo).addOrUpdateBook(bookArg.capture());
         Book bookArgValue = bookArg.getValue();
         assertThat(bookArgValue.getId()).isEqualTo(book.getId());
         assertThat(bookArgValue.getBorrow()).isNotNull();
@@ -134,7 +132,7 @@ public class BorrowServiceTest {
 
         // then
         ArgumentCaptor<Book> bookArg = ArgumentCaptor.forClass(Book.class);
-        verify(bookRepo, times(1)).addOrUpdateBook(bookArg.capture());
+        verify(bookRepo).addOrUpdateBook(bookArg.capture());
         Book bookArgValue = bookArg.getValue();
         assertThat(bookArgValue.getBorrow()).isNull();
     }
@@ -168,6 +166,7 @@ public class BorrowServiceTest {
         // then
         assertThat(bookHistory).hasSize(0);
     }
+
     @Test
     public void shouldRecordBookHistory() {
 
@@ -177,7 +176,7 @@ public class BorrowServiceTest {
 
         // then
         ArgumentCaptor<BookHistoryEntry> argumentCaptor = ArgumentCaptor.forClass(BookHistoryEntry.class);
-        verify(bookHistoryRepository, times(1)).addBookHistoryEntry(argumentCaptor.capture());
+        verify(bookHistoryRepository).addBookHistoryEntry(argumentCaptor.capture());
         BookHistoryEntry bookHistoryEntry = argumentCaptor.getValue();
 
         assertThat(bookHistoryEntry.getBookId()).isEqualTo(BOOK_ID);
