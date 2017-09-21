@@ -3,7 +3,7 @@ package repository;
 import model.Reader;
 
 public interface ReaderRepository {
-    Reader add(Reader reader);
+    Reader addReader(Reader reader);
 
     Reader getReader(int id);
 

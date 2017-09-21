@@ -18,7 +18,7 @@ public class ReaderRepositoryImplTest {
 
         // when
 
-        Reader persistedReader1 = repo.add(reader1);
+        Reader persistedReader1 = repo.addReader(reader1);
 
         // then
         assertThat(persistedReader1).isNotSameAs(reader1);
@@ -27,7 +27,7 @@ public class ReaderRepositoryImplTest {
 
         // when
         Reader reader2 = new Reader("FirstName2", "LastName2");
-        Reader persistedReader2 = repo.add(reader2);
+        Reader persistedReader2 = repo.addReader(reader2);
 
         // then
         assertThat(persistedReader2.getId()).isNotEqualTo(persistedReader1.getId());

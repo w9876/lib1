@@ -11,7 +11,7 @@ public class ReaderRepositoryImpl implements ReaderRepository {
     private final Serializer serializer = new Serializer();
 
     @Override
-    public Reader add(Reader reader) {
+    public Reader addReader(Reader reader) {
         Reader clone = getClone(reader);
         clone.setId(idCounter.incrementAndGet());
         readers.put(clone.getId(), clone);

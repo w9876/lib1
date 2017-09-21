@@ -7,7 +7,6 @@ import repository.ReaderRepository;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -18,6 +17,21 @@ public class LibraryService {
     private final ReaderRepository readerRepo;
     private final BookHistoryRepository bookHistoryRepo;
 
+    public Reader addReader(Reader reader) {
+        return readerRepo.addReader(reader);
+    }
+
+    public Reader getReader(int id) {
+        return readerRepo.getReader(id);
+    }
+
+    public Book getBook(int id) {
+        return bookRepo.getBook(id);
+    }
+
+    public Book addOrUpdateBook(Book book) {
+        return bookRepo.addOrUpdateBook(book);
+    }
 
     public LibraryService(BookRepository bookRepo, ReaderRepository readerRepo, BookHistoryRepository bookHistoryRepo) {
         this.bookRepo = bookRepo;
@@ -58,9 +72,16 @@ public class LibraryService {
         }
         book.setBorrow(null);
         bookRepo.addOrUpdateBook(book);
+
+        LocalDate returnDate = LocalDate.now();
+        bookHistoryRepo.addBookHistoryEntry(new BookHistoryEntry(bookId, readerId, returnDate, Operation.RETURN));
     }
 
     public List<BookHistoryEntry> getBookHistory(int bookId) {
-        return new ArrayList<>();
+        return bookHistoryRepo.getBookHistory(bookId);
+    }
+
+    public List<BookHistoryEntry> getReaderHistory(int readerId) {
+        return bookHistoryRepo.getReaderHistory(readerId);
     }
 }

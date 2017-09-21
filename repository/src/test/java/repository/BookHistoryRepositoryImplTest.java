@@ -28,7 +28,7 @@ public class BookHistoryRepositoryImplTest {
     public void shouldAddBookHistoryEntry() {
         // given
         int bookId = bookRepository.addOrUpdateBook(book1).getId();
-        int readerId = readerRepository.add(reader1).getId();
+        int readerId = readerRepository.addReader(reader1).getId();
 
         // when
         BookHistoryEntry entry = new BookHistoryEntry(bookId, readerId, LocalDate.now(), Operation.BORROW);
