@@ -2,13 +2,22 @@ package service;
 
 import model.Book;
 import model.BookHistoryEntry;
+import model.Operation;
 import model.Reader;
 import org.junit.Before;
 import org.junit.Test;
 import repository.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -73,9 +82,7 @@ public class LibraryServiceITest {
     }
 
     @Test
-
-
-    public void shouldReturnBookHistoryForOneBook() {
+    public void shouldReturnBookHistory() {
 
         // when
         libraryService.borrowBook(readerId1, bookId1);
@@ -90,6 +97,42 @@ public class LibraryServiceITest {
         // then
         assertThat(bookHistory).hasSize(3);
         assertThat(bookHistory.get(0).getReaderId()).isEqualTo(readerId1);
+
+        assertThat(bookHistory.stream().map(bhe1 -> bhe1.getBookId()).distinct().collect(toList()))
+                .containsExactly(bookId1);
+
+        List<Integer> borrowers = bookHistory.stream()
+                .filter(bhe -> bhe.getOperation() == Operation.BORROW)
+                .map(bhe -> bhe.getReaderId())
+                .flatMap( p-> Arrays.asList(p).stream())
+                .collect(toList());
+        assertThat(borrowers).containsOnly(readerId1, readerId2);
+
+
+        ToIntFunction<? super Object> a;
+        bookHistory.stream()
+                .mapToInt(BookHistoryEntry::getReaderId)
+                .collect(Collectors.averagingInt( i -> 1));
+
+
+        System.out.println("aaa:" + collect);
+
+Collectors.averagingInt()
+
+    }
+
+
+
+
+    @Test
+    public void shouldReturnReaderHistory() {
+
+        // when
+        libraryService.borrowBook(readerId1, bookId1);
+        libraryService.borrowBook(readerId2, bookId2);
+        libraryService.returnBook(readerId1, bookId1);
+        libraryService.borrowBook(readerId2, bookId1);
+
 
         // when
         List<BookHistoryEntry> readerHistory = libraryService.getReaderHistory(readerId1);
